@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <title>Easy signup - configuration</title>
   <style type="text/css">
@@ -11,25 +12,25 @@
     
     body {
       font-family: 'Lato', Verdana, Geneva, Tahoma, sans-serif;
+      margin: 10px;
     }
+
     
     button {
-      display: inline-block;
-      border: 0;
-    }
-    
-    button {
-      color: #4aa3df;
-    }
-    
-    .button-remove-filler, .button-add-keyword, .button-remove-keyword {
       text-decoration: none;
       font-size: 14pt;
       font-weight: bold;
       border-radius: 15px;
       background: #eee;
+      color: #4aa3df;
       padding: 5px;
       text-align: center;
+      display: inline-block;
+      border: 0;
+    }
+    
+    li {
+      display: inline-block;
     }
     
     fieldset {
@@ -39,9 +40,11 @@
       margin: 10px;
       padding: 10px;
     }
+    
     fieldset h1 input {
       color: #4aa3df;
     }
+    
     fieldset input {
       border: 0;
       border-bottom: 2px dashed #ccc;
@@ -67,16 +70,23 @@
     }
   </style>
 </head>
+
 <body>
   <header>
-    <h1>temporary ui</h1>
+    <h1>Easy Signup options</h1>
     <ul>
-      <li><a href="/add" class="button-add-filler">Add</a></li>  
-    </ul>  
+      <li>
+        <button class="button-add-filler">Add</button>
+      </li>
+      <li>
+        <button class="button-save">Save</button>
+      </li>
+    </ul>
   </header>
   <form id="fillers">
   </form>
   <script type="text/javascript" src="./easy_signup.js"></script>
   <script type="text/javascript" src="./options.js"></script>
 </body>
+
 </html>

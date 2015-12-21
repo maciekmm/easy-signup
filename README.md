@@ -6,7 +6,7 @@ This extension was created to provide signup/login forms prefilling allowing you
 
 #Roadmap
 
-- Options page
 - Support for variables {domain}, {name} and so on to support creating alias emails for catch-all solutions or simple '+' label.
-- Own custom fields
 - Heuristics
+- Support for dynamic websites
+- Ordering keywords 

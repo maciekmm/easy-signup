@@ -11,7 +11,7 @@ EasySignup.Options = new function () {
 
   var defaultFillers = [
     new EasySignup.Filler(["mail"], "example@example.com"),
-    new EasySignup.Filler(["username"], "exampleUsername")
+    new EasySignup.Filler(["username", "user", "name", "login"], "exampleUsername")
   ]
 
   var fillers = [];
@@ -23,11 +23,11 @@ EasySignup.Options = new function () {
     
     //Remove button
     var removeButton = document.createElement("button");
-    removeButton.className = "button-remove-filler";
     removeButton.innerText = "- Remove filler";
 
     removeButton.addEventListener("click", function (event) {
       //Hacky, but works, oh well.
+      event.preventDefault();
       event.target.parentElement.parentElement.removeChild(event.target.parentElement);
     });
 
@@ -41,12 +41,12 @@ EasySignup.Options = new function () {
     
     var addField = document.createElement("button");
     addField.innerText = "+";
-    addField.className = "button-add-keyword";
-    addField.addEventListener("click",function(event) {
+    addField.addEventListener("click", function (event) {
+      event.preventDefault();
       addKeyword(fieldset);
     });
     keywordsHeader.appendChild(addField);
-    
+
     defList.appendChild(keywordsHeader);
 
     var valueHeader = document.createElement("dt");
@@ -67,6 +67,7 @@ EasySignup.Options = new function () {
     });
 
     form.appendChild(fieldset);
+    return fieldset;
   }
 
   function addKeyword(filler, keyword) {
@@ -76,7 +77,6 @@ EasySignup.Options = new function () {
     //Button for removing keyword
     var removeButton = document.createElement("button");
     removeButton.innerText = "-";
-    removeButton.className = "button-remove-keyword";
     removeButton.addEventListener("click", function (event) {
       event.target.parentElement.parentElement.removeChild(event.target.parentElement);
     });
@@ -85,6 +85,7 @@ EasySignup.Options = new function () {
     //Input button for keyword name
     var input = document.createElement("input");
     input.type = "text";
+    input.name = "keyword";
     if (keyword) {
       input.value = keyword;
     } else {
@@ -94,22 +95,50 @@ EasySignup.Options = new function () {
     header.parentNode.insertBefore(entry, header.nextSibling);
   }
 
+  function save(form) {
+    var fillers = [];
+    var rawFillers = form.getElementsByTagName("fieldset");
+    for (var i = 0; i < rawFillers.length; i++) {
+      var filler = new EasySignup.Filler([], rawFillers[i].querySelector('[name="value"]').value);
+      //get keywords
+      var rawKeywords = rawFillers[i].querySelectorAll('[name="keyword"]');
+      for (var j = 0; j < rawKeywords.length; j++) {
+        filler.keywords.push(rawKeywords[j].value);
+      }
+      fillers.push(filler);
+    }
+    chrome.storage.sync.set({ 'fillers': fillers });
+  }
 
 
   this.init = function () {
+    var form = document.getElementById("fillers");
     chrome.storage.sync.get("fillers", function (resp) {
       if (isEmpty(resp)) {
         //setup defaults
-        console.log("test");
         chrome.storage.sync.set({ 'fillers': defaultFillers });
         fillers = defaultFillers; //We don't need to clone this really.
       } else {
         fillers = resp.fillers;
       }
-      var form = document.getElementById("fillers");
-     
       fillers.forEach(function (element) {
         addFiller(form, element);
+      });
+    });
+
+    var addButtons = document.getElementsByClassName("button-add-filler");
+    Array.prototype.forEach.call(addButtons, function (element) {
+      element.addEventListener("click", function (event) {
+        event.preventDefault();
+        addFiller(form, defaultFillers[0]).scrollIntoView();
+      });
+    });
+
+    var saveButtons = document.getElementsByClassName("button-save");
+    Array.prototype.forEach.call(saveButtons, function (element) {
+      element.addEventListener("click", function (event) {
+        event.preventDefault();
+        save(form);
       });
     });
   };
