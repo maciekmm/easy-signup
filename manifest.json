@@ -9,19 +9,20 @@
     //"default_icon": "icon.png",
     "default_popup": "popup.html"
   },
-  "options_page": "options/options.html",
+  "options_page": "src/options.html",
 
   "content_scripts": [{
     "matches": [
       "*://*/*"
     ],
     "js": [
-      "js/easy_signup.js"
+      "src/easy_signup.js",
+      "src/content_script.js"
     ]
   }],
-
+  
   "permissions": [
-    "tabs",
-    "storage"
+    "storage",
+    "tabs"
   ]
 }

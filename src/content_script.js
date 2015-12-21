@@ -1,11 +1,6 @@
-var EasySignup = new function() {
+EasySignup.ContentScript = new function() {
   var fillers = [];
-
-  function Filler(keywords, value) {
-    this.keywords = keywords;
-    this.value = value;
-  }
-
+  
   function findField(form, keywords) {
     Array.prototype.forEach.call(keywords, function(keyword) {
       keyword = keyword.toLowerCase();
@@ -35,6 +30,7 @@ var EasySignup = new function() {
   }
 
   function fillForm(form) {
+    console.log("test");
     Array.prototype.forEach.call(fillers, function(filler) {
       field = findField(form, filler.keywords);
       if (!field) {
@@ -53,7 +49,7 @@ var EasySignup = new function() {
   function ensureFillers(callback) {
     if (!fillers) {
       chrome.storage.sync.get("fillers", function(resp) {
-        fillers = resp;
+        fillers = resp.fillers;
         callback();
       });
     }
@@ -62,7 +58,9 @@ var EasySignup = new function() {
 
   this.init = function() {
     var forms = document.getElementsByTagName("form");
+    console.log(forms);
     Array.prototype.forEach.call(forms, function(form) {
+      
       if (form.querySelector('[type="password"]')) { //Password field determines whether the form is login/signup form
         ensureFillers(function() {
           fillForm(form);
@@ -72,4 +70,4 @@ var EasySignup = new function() {
   };
 }();
 
-EasySignup.init();
+EasySignup.ContentScript.init();
