@@ -1,5 +1,6 @@
 EasySignup.ContentScript = new function () {
   var fillers;
+  var variables = [];
 
   function findField(form, keywords) {
     for (var i = 0; i < keywords.length; i++) {
@@ -37,7 +38,11 @@ EasySignup.ContentScript = new function () {
         console.log("Could not find for " + filler.keywords);
         return;
       }
-      field.value = filler.value;
+      var value = filler.value;
+      for (var i = 0; i < variables.length; i++) {
+        value = value.replace('{' + variables[i].variable + '}', variables[i].replacement);
+      }
+      field.value = value;
     });
 
     //Unsubscribe from newsletters
@@ -59,6 +64,7 @@ EasySignup.ContentScript = new function () {
   }
 
   this.init = function () {
+    variables.push(new EasySignup.Variable("hostname", window.location.hostname));
     var forms = document.getElementsByTagName("form");
     Array.prototype.forEach.call(forms, function (form) {
       if (form.querySelector('[type="password"]')) { //Password field determines whether the form is login/signup form
