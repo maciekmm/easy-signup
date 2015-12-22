@@ -13,7 +13,8 @@
 
   "content_scripts": [{
     "matches": [
-      "*://*/*"
+      "http://*/*",
+      "https://*/*"
     ],
     "js": [
       "src/easy_signup.js",
@@ -23,6 +24,8 @@
   
   "permissions": [
     "storage",
+    "identity",
+    "identity.email",
     "tabs"
   ]
 }

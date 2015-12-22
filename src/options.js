@@ -11,7 +11,7 @@ EasySignup.Options = new function () {
 
   var defaultFillers = [
     new EasySignup.Filler(["mail"], "example@example.com"),
-    new EasySignup.Filler(["username", "user", "name", "login"], "exampleUsername")
+    new EasySignup.Filler(["username", "user", "name", "login"], chrome.identity.id)
   ]
 
   var fillers = [];
@@ -110,8 +110,7 @@ EasySignup.Options = new function () {
     chrome.storage.sync.set({ 'fillers': fillers });
   }
 
-
-  this.init = function () {
+  function load() {
     var form = document.getElementById("fillers");
     chrome.storage.sync.get("fillers", function (resp) {
       if (isEmpty(resp)) {
@@ -125,7 +124,18 @@ EasySignup.Options = new function () {
         addFiller(form, element);
       });
     });
+  }
 
+  this.init = function () {
+    if (chrome.identity) {
+      chrome.identity.getProfileUserInfo(function (profile) {
+        defaultFillers[0].value = profile.email;
+        load();
+      });
+    } else {
+      load();
+    }
+    
     var addButtons = document.getElementsByClassName("button-add-filler");
     Array.prototype.forEach.call(addButtons, function (element) {
       element.addEventListener("click", function (event) {
