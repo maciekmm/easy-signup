@@ -11,7 +11,7 @@ EasySignup.Options = new function () {
 
   var defaultFillers = [
     new EasySignup.Filler(["mail"], "example@example.com"),
-    new EasySignup.Filler(["username", "user", "name", "login"], chrome.identity.id)
+    new EasySignup.Filler(["username", "user", "name", "login"], "username")
   ]
 
   var fillers = [];
@@ -136,6 +136,7 @@ EasySignup.Options = new function () {
       load();
     }
     
+    var form = document.getElementById("fillers");
     var addButtons = document.getElementsByClassName("button-add-filler");
     Array.prototype.forEach.call(addButtons, function (element) {
       element.addEventListener("click", function (event) {
