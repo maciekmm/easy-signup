@@ -43,6 +43,7 @@ EasySignup.ContentScript = new function () {
         value = value.replace('{' + variables[i].variable + '}', variables[i].replacement);
       }
       field.value = value;
+      field.dispatchEvent(new Event('change', { 'bubbles': true })) 
     });
 
     //Unsubscribe from newsletters
