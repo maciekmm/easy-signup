@@ -102,7 +102,7 @@ EasySignup.Options = new function () {
       var filler = new EasySignup.Filler([], rawFillers[i].querySelector('[name="value"]').value);
       //get keywords
       var rawKeywords = rawFillers[i].querySelectorAll('[name="keyword"]');
-      for (var j = 0; j < rawKeywords.length; j++) {
+      for (var j = rawKeywords.length-1; j >= 0 ; j--) {
         filler.keywords.push(rawKeywords[j].value);
       }
       fillers.push(filler);

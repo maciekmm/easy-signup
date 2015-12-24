@@ -8,17 +8,17 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'Lato', 'Open Sans', sans-serif;
     }
     
     body {
-      font-family: 'Lato', Verdana, Geneva, Tahoma, sans-serif;
       margin: 10px;
     }
 
     header h1, header img, header li, header ul {
       vertical-align: middle;
       display: inline-block;
-      margin: 10px;
+      margin: 0 10px;
     }
     
     button {
@@ -42,7 +42,7 @@
       background: #f7f7f7;
       border-radius: 5px;
       border: 0;
-      margin: 10px;
+      margin: 10px 0;
       padding: 10px;
     }
     
@@ -50,9 +50,13 @@
       color: #4aa3df;
     }
     
+    fieldset dd {
+      border-bottom: 2px dashed #ccc;
+    }
+    
     fieldset input {
       border: 0;
-      border-bottom: 2px dashed #ccc;
+      
       background: none;
       font-size: 14pt;
       margin: 5px 0;
@@ -88,6 +92,11 @@
       </li>
     </ul>
   </header>
+  <h2>Variables</h2>
+  <ul>
+    <li>{hostname} - changes to site's hostname, i.e: google.com</li>
+  </ul>
+  
   <form id="fillers">
   </form>
   <script type="text/javascript" src="./easy_signup.js"></script>
