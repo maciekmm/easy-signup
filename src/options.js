@@ -24,6 +24,7 @@ EasySignup.Options = new function () {
     //Remove button
     var removeButton = document.createElement("button");
     removeButton.innerText = "- Remove filler";
+    removeButton.className = "button-remove";
 
     removeButton.addEventListener("click", function (event) {
       //Hacky, but works, oh well.
@@ -112,6 +113,7 @@ EasySignup.Options = new function () {
 
   function load() {
     var form = document.getElementById("fillers");
+
     chrome.storage.sync.get("fillers", function (resp) {
       if (isEmpty(resp)) {
         //setup defaults
