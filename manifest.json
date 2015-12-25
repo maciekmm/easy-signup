@@ -10,7 +10,6 @@
   "options_ui": {
     "page": "src/options.html",
     "chrome_style": true
-    //"open_in_tab": true
   },
   "content_scripts": [
     {
@@ -33,8 +32,7 @@
   },
   "permissions": [
     "storage",
-    "identity",
-    "identity.email",
-    "tabs"
+	 "identity",
+    "identity.email"
   ]
 }
