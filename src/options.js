@@ -1,7 +1,7 @@
 EasySignup.Options = new function () {
 	var defaultFillers = [
 		new EasySignup.Filler(["mail"], "example@example.com"),
-		new EasySignup.Filler(["username", "user", "name", "login"].reverse(), "username")
+		new EasySignup.Filler(["username", "user", "name", "login"], "username")
 	];
 
 	var fillers = [];
@@ -42,6 +42,7 @@ EasySignup.Options = new function () {
 
 		var valueHeader = document.createElement("dt");
 		valueHeader.innerHTML = 'Value';
+		valueHeader.className = "value-header";
 		defList.appendChild(valueHeader);
 
 		//Value/replacement
@@ -62,7 +63,7 @@ EasySignup.Options = new function () {
 	}
 
 	function addKeyword(filler, keyword) {
-		var header = filler.getElementsByClassName("keyword-header")[0];
+		var header = filler.getElementsByClassName("value-header")[0];
 		var entry = document.createElement("dd");
 
 		//Button for removing keyword
@@ -83,7 +84,7 @@ EasySignup.Options = new function () {
 			input.value = "placeholder";
 		}
 		entry.appendChild(input);
-		header.parentNode.insertBefore(entry, header.nextSibling);
+		header.parentNode.insertBefore(entry, header);
 	}
 
 	function save(form) {
@@ -93,7 +94,7 @@ EasySignup.Options = new function () {
 			var filler = new EasySignup.Filler([], rawFillers[i].querySelector('[name="value"]').value);
 			//get keywords
 			var rawKeywords = rawFillers[i].querySelectorAll('[name="keyword"]');
-			for (var j = rawKeywords.length - 1; j >= 0; j--) {
+			for (var j = 0; j < rawKeywords.length; j++) {
 				filler.keywords.push(rawKeywords[j].value);
 			}
 			fillers.push(filler);

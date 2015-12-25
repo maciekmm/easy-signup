@@ -35,7 +35,6 @@ EasySignup.ContentScript = new function () {
 		Array.prototype.forEach.call(fillers, function (filler) {
 			var field = findField(form, filler.keywords);
 			if (!field) {
-				console.log("Could not find for " + filler.keywords);
 				return;
 			}
 			var value = filler.value;
