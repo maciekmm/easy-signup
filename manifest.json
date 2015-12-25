@@ -24,6 +24,13 @@
       ]
     }
   ],
+  "background": {
+    "scripts": [
+      "src/background.js",
+      "src/easy_signup.js"
+    ],
+    "persistent": false
+  },
   "permissions": [
     "storage",
     "identity",

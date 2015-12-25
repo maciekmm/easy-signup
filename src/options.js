@@ -1,17 +1,7 @@
 EasySignup.Options = new function () {
-
-  function isEmpty(obj) {
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop))
-        return false;
-    }
-
-    return true;
-  }
-
   var defaultFillers = [
     new EasySignup.Filler(["mail"], "example@example.com"),
-    new EasySignup.Filler(["username", "user", "name", "login"], "username")
+    new EasySignup.Filler(["username", "user", "name", "login"].reverse(), "username")
   ]
 
   var fillers = [];
@@ -103,7 +93,7 @@ EasySignup.Options = new function () {
       var filler = new EasySignup.Filler([], rawFillers[i].querySelector('[name="value"]').value);
       //get keywords
       var rawKeywords = rawFillers[i].querySelectorAll('[name="keyword"]');
-      for (var j = rawKeywords.length-1; j >= 0 ; j--) {
+      for (var j = rawKeywords.length - 1; j >= 0; j--) {
         filler.keywords.push(rawKeywords[j].value);
       }
       fillers.push(filler);
@@ -115,7 +105,7 @@ EasySignup.Options = new function () {
     var form = document.getElementById("fillers");
 
     chrome.storage.sync.get("fillers", function (resp) {
-      if (isEmpty(resp)) {
+      if (EasySignup.isEmpty(resp)) {
         //setup defaults
         chrome.storage.sync.set({ 'fillers': defaultFillers });
         fillers = defaultFillers; //We don't need to clone this really.
@@ -137,7 +127,7 @@ EasySignup.Options = new function () {
     } else {
       load();
     }
-    
+
     var form = document.getElementById("fillers");
     var addButtons = document.getElementsByClassName("button-add-filler");
     Array.prototype.forEach.call(addButtons, function (element) {
