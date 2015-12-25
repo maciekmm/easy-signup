@@ -63,14 +63,23 @@ EasySignup.ContentScript = new function () {
 		}
 	}
 
-	this.init = function () {
-		variables.push(new EasySignup.Variable("hostname", window.location.hostname));
-		var forms = document.getElementsByTagName("form");
+	function fillForms(parent) {
+		var forms = parent.getElementsByTagName("form");
 		Array.prototype.forEach.call(forms, function (form) {
 			if (form.querySelector('[type="password"]')) { //Password field determines whether the form is login/signup form
 				ensureFillers(function () {
 					fillForm(form);
 				});
+			}
+		});
+	}
+
+	this.init = function () {
+		variables.push(new EasySignup.Variable("hostname", window.location.hostname));
+		fillForms(document.body);
+		document.addEventListener("DOMNodeInserted", function (e) {
+			if (e.target.tagName) {
+				fillForms(e.target);
 			}
 		});
 	};
