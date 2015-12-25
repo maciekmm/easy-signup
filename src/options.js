@@ -1,150 +1,150 @@
 EasySignup.Options = new function () {
-  var defaultFillers = [
-    new EasySignup.Filler(["mail"], "example@example.com"),
-    new EasySignup.Filler(["username", "user", "name", "login"].reverse(), "username")
-  ]
+	var defaultFillers = [
+		new EasySignup.Filler(["mail"], "example@example.com"),
+		new EasySignup.Filler(["username", "user", "name", "login"].reverse(), "username")
+	];
 
-  var fillers = [];
+	var fillers = [];
 
-  // We might use some templating like handlebars
-  
-  function addFiller(form, filler) {
-    var fieldset = document.createElement("fieldset");
-    
-    //Remove button
-    var removeButton = document.createElement("button");
-    removeButton.innerText = "- Remove filler";
-    removeButton.className = "button-remove";
+	// We might use some templating like handlebars
 
-    removeButton.addEventListener("click", function (event) {
-      //Hacky, but works, oh well.
-      event.preventDefault();
-      event.target.parentElement.parentElement.removeChild(event.target.parentElement);
-    });
+	function addFiller(form, filler) {
+		var fieldset = document.createElement("fieldset");
 
-    fieldset.appendChild(removeButton);
-    
-    //Definitions list
-    var defList = document.createElement("dl");
-    var keywordsHeader = document.createElement("dt");
-    keywordsHeader.className = "keyword-header";
-    keywordsHeader.innerHTML = 'Keywords'; //Will this work?
-    
-    var addField = document.createElement("button");
-    addField.innerText = "+";
-    addField.addEventListener("click", function (event) {
-      event.preventDefault();
-      addKeyword(fieldset);
-    });
-    keywordsHeader.appendChild(addField);
+		//Remove button
+		var removeButton = document.createElement("button");
+		removeButton.innerText = "- Remove filler";
+		removeButton.className = "button-remove";
 
-    defList.appendChild(keywordsHeader);
+		removeButton.addEventListener("click", function (event) {
+			//Hacky, but works, oh well.
+			event.preventDefault();
+			event.target.parentElement.parentElement.removeChild(event.target.parentElement);
+		});
 
-    var valueHeader = document.createElement("dt");
-    valueHeader.innerHTML = 'Value';
-    defList.appendChild(valueHeader);
+		fieldset.appendChild(removeButton);
 
-    //Value/replacement
-    var valueInput = document.createElement("input");
-    valueInput.type = "text";
-    valueInput.value = filler.value;
-    valueInput.name = "value";
-    defList.appendChild(valueInput); //Might be an overkill
-        
-    fieldset.appendChild(defList);
+		//Definitions list
+		var defList = document.createElement("dl");
+		var keywordsHeader = document.createElement("dt");
+		keywordsHeader.className = "keyword-header";
+		keywordsHeader.innerHTML = 'Keywords'; //Will this work?
 
-    filler.keywords.forEach(function (element) {
-      addKeyword(fieldset, element);
-    });
+		var addField = document.createElement("button");
+		addField.innerText = "+";
+		addField.addEventListener("click", function (event) {
+			event.preventDefault();
+			addKeyword(fieldset);
+		});
+		keywordsHeader.appendChild(addField);
 
-    form.appendChild(fieldset);
-    return fieldset;
-  }
+		defList.appendChild(keywordsHeader);
 
-  function addKeyword(filler, keyword) {
-    var header = filler.getElementsByClassName("keyword-header")[0];
-    var entry = document.createElement("dd");
-    
-    //Button for removing keyword
-    var removeButton = document.createElement("button");
-    removeButton.innerText = "-";
-    removeButton.addEventListener("click", function (event) {
-      event.target.parentElement.parentElement.removeChild(event.target.parentElement);
-    });
-    entry.appendChild(removeButton);
-    
-    //Input button for keyword name
-    var input = document.createElement("input");
-    input.type = "text";
-    input.name = "keyword";
-    if (keyword) {
-      input.value = keyword;
-    } else {
-      input.value = "placeholder";
-    }
-    entry.appendChild(input);
-    header.parentNode.insertBefore(entry, header.nextSibling);
-  }
+		var valueHeader = document.createElement("dt");
+		valueHeader.innerHTML = 'Value';
+		defList.appendChild(valueHeader);
 
-  function save(form) {
-    var fillers = [];
-    var rawFillers = form.getElementsByTagName("fieldset");
-    for (var i = 0; i < rawFillers.length; i++) {
-      var filler = new EasySignup.Filler([], rawFillers[i].querySelector('[name="value"]').value);
-      //get keywords
-      var rawKeywords = rawFillers[i].querySelectorAll('[name="keyword"]');
-      for (var j = rawKeywords.length - 1; j >= 0; j--) {
-        filler.keywords.push(rawKeywords[j].value);
-      }
-      fillers.push(filler);
-    }
-    chrome.storage.sync.set({ 'fillers': fillers });
-  }
+		//Value/replacement
+		var valueInput = document.createElement("input");
+		valueInput.type = "text";
+		valueInput.value = filler.value;
+		valueInput.name = "value";
+		defList.appendChild(valueInput); //Might be an overkill
 
-  function load() {
-    var form = document.getElementById("fillers");
+		fieldset.appendChild(defList);
 
-    chrome.storage.sync.get("fillers", function (resp) {
-      if (EasySignup.isEmpty(resp)) {
-        //setup defaults
-        chrome.storage.sync.set({ 'fillers': defaultFillers });
-        fillers = defaultFillers; //We don't need to clone this really.
-      } else {
-        fillers = resp.fillers;
-      }
-      fillers.forEach(function (element) {
-        addFiller(form, element);
-      });
-    });
-  }
+		filler.keywords.forEach(function (element) {
+			addKeyword(fieldset, element);
+		});
 
-  this.init = function () {
-    if (chrome.identity) {
-      chrome.identity.getProfileUserInfo(function (profile) {
-        defaultFillers[0].value = profile.email;
-        load();
-      });
-    } else {
-      load();
-    }
+		form.appendChild(fieldset);
+		return fieldset;
+	}
 
-    var form = document.getElementById("fillers");
-    var addButtons = document.getElementsByClassName("button-add-filler");
-    Array.prototype.forEach.call(addButtons, function (element) {
-      element.addEventListener("click", function (event) {
-        event.preventDefault();
-        addFiller(form, defaultFillers[0]).scrollIntoView();
-      });
-    });
+	function addKeyword(filler, keyword) {
+		var header = filler.getElementsByClassName("keyword-header")[0];
+		var entry = document.createElement("dd");
 
-    var saveButtons = document.getElementsByClassName("button-save");
-    Array.prototype.forEach.call(saveButtons, function (element) {
-      element.addEventListener("click", function (event) {
-        event.preventDefault();
-        save(form);
-      });
-    });
-  };
+		//Button for removing keyword
+		var removeButton = document.createElement("button");
+		removeButton.innerText = "-";
+		removeButton.addEventListener("click", function (event) {
+			event.target.parentElement.parentElement.removeChild(event.target.parentElement);
+		});
+		entry.appendChild(removeButton);
+
+		//Input button for keyword name
+		var input = document.createElement("input");
+		input.type = "text";
+		input.name = "keyword";
+		if (keyword) {
+			input.value = keyword;
+		} else {
+			input.value = "placeholder";
+		}
+		entry.appendChild(input);
+		header.parentNode.insertBefore(entry, header.nextSibling);
+	}
+
+	function save(form) {
+		var fillers = [];
+		var rawFillers = form.getElementsByTagName("fieldset");
+		for (var i = 0; i < rawFillers.length; i++) {
+			var filler = new EasySignup.Filler([], rawFillers[i].querySelector('[name="value"]').value);
+			//get keywords
+			var rawKeywords = rawFillers[i].querySelectorAll('[name="keyword"]');
+			for (var j = rawKeywords.length - 1; j >= 0; j--) {
+				filler.keywords.push(rawKeywords[j].value);
+			}
+			fillers.push(filler);
+		}
+		chrome.storage.sync.set({ 'fillers': fillers });
+	}
+
+	function load() {
+		var form = document.getElementById("fillers");
+
+		chrome.storage.sync.get("fillers", function (resp) {
+			if (EasySignup.isEmpty(resp)) {
+				//setup defaults
+				chrome.storage.sync.set({ 'fillers': defaultFillers });
+				fillers = defaultFillers; //We don't need to clone this really.
+			} else {
+				fillers = resp.fillers;
+			}
+			fillers.forEach(function (element) {
+				addFiller(form, element);
+			});
+		});
+	}
+
+	this.init = function () {
+		if (chrome.identity) {
+			chrome.identity.getProfileUserInfo(function (profile) {
+				defaultFillers[0].value = profile.email;
+				load();
+			});
+		} else {
+			load();
+		}
+
+		var form = document.getElementById("fillers");
+		var addButtons = document.getElementsByClassName("button-add-filler");
+		Array.prototype.forEach.call(addButtons, function (element) {
+			element.addEventListener("click", function (event) {
+				event.preventDefault();
+				addFiller(form, defaultFillers[0]).scrollIntoView();
+			});
+		});
+
+		var saveButtons = document.getElementsByClassName("button-save");
+		Array.prototype.forEach.call(saveButtons, function (element) {
+			element.addEventListener("click", function (event) {
+				event.preventDefault();
+				save(form);
+			});
+		});
+	};
 
 } ();
 

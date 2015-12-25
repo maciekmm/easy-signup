@@ -7,5 +7,5 @@ chrome.runtime.onInstalled.addListener(function (e) {
 				window.open(chrome.runtime.getURL("src/options.html"));
 			}
 		}
-	})
+	});
 });
