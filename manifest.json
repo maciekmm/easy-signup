@@ -1,38 +1,38 @@
 {
-  "manifest_version": 2,
-  "name": "Easy signup",
-  "description": "Chrome extension aiming to make signing up easy.",
-  "version": "0.1",
-  "icons": {
-    "128": "icon128.png",
-    "48": "icon48.png"
-  },
-  "options_ui": {
-    "page": "src/options.html",
-    "chrome_style": true
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": [
-        "src/easy_signup.js",
-        "src/content_script.js"
-      ]
-    }
-  ],
-  "background": {
-    "scripts": [
-      "src/background.js",
-      "src/easy_signup.js"
-    ],
-    "persistent": false
-  },
-  "permissions": [
-    "storage",
-	 "identity",
-    "identity.email"
-  ]
+	"manifest_version": 2,
+	"name": "Easy signup",
+	"description": "Chrome extension aiming to make signing up easy.",
+	"version": "0.1",
+	"icons": {
+		"128": "icon128.png",
+		"48": "icon48.png"
+	},
+	"options_ui": {
+		"page": "src/options.html",
+		"chrome_style": true
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js": [
+				"src/easy_signup.js",
+				"src/content_script.js"
+			]
+		}
+	],
+	"background": {
+		"scripts": [
+			"src/background.js",
+			"src/easy_signup.js"
+		],
+		"persistent": false
+	},
+	"permissions": [
+		"storage",
+		"identity",
+		"identity.email"
+	]
 }

@@ -81,7 +81,7 @@ EasySignup.Options = new function () {
 		if (keyword) {
 			input.value = keyword;
 		} else {
-			input.value = "placeholder";
+			input.placeholder  = "placeholder";
 		}
 		entry.appendChild(input);
 		header.parentNode.insertBefore(entry, header);
