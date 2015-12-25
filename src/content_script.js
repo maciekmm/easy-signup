@@ -76,6 +76,7 @@ EasySignup.ContentScript = new function () {
 
 	this.init = function () {
 		variables.push(new EasySignup.Variable("hostname", window.location.hostname));
+		variables.push(new EasySignup.Variable("hostname-no-www", window.location.hostname.replace("www\.", "")));
 		fillForms(document.body);
 		document.addEventListener("DOMNodeInserted", function (e) {
 			if (e.target.tagName) {
